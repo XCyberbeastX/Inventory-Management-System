@@ -1,0 +1,8 @@
+.vscode/
+.static/barcodes/
+.static/images/
+.static/pdfs/
+.src/__pycache__/
+.instance/
+*.db
+*.pyc
