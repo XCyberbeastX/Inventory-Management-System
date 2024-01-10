@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Component</title>
+    <link rel="stylesheet" href="/static/css/add_component.css">
+</head>
+
+<body>
+    <aside>
+        <nav>
+            <ul>
+                <li><a href="{{url_for('home')}}" style="color:white; text-decoration: none;">Components Overview</a>
+                </li>
+                <li style="background-color: #83a9d3;">
+                    <a href="{{url_for('add_component')}}" style="color: white; text-decoration: none;">Add Component</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        
+        <div class="container">
+            <h1>Create New Component</h1>
+            <div class="card">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <label for="name">Name:</label>
+                    {{ form.name() }}
+                    <label for="io_number">IO-Number:</label>
+                    {{ form.io_number() }}
+                    <label for="description">description:(Optional)</label>
+                    <textarea name="description" cols="30" rows="10"></textarea>
+                    <label for="quantity">quantity:</label>
+                    {{ form.quantity() }}
+                    <label for="category">Category:</label>
+                    {{ form.category() }}
+                    <label for="datasheet">Datasheet-upload:(Optional)</label>
+                    <input type="file" name="datasheet" accept="application/pdf">
+                    <label for="image">Image-upload:(Optional)</label>
+                    <input type="file" name="image" accept="image/png, image/jpeg, image/jpg, image/gif">
+                    <input class="submit-btn" type="submit" value="Add component">
+                </form>
+            </div>
+        </div>
+        <script src="/static/js/add_component.js"></script>
+    </main>
+</body>
+
+</html>

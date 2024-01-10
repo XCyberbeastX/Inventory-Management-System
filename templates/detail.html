@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail view of the electronic component</title>
+    <link rel="stylesheet" href="/static/css/detail.css">
+    <script>
+        function toggleEditMode() {
+            var details = document.getElementById("details");
+            var editMode = document.getElementById("edit-mode");
+            if (details.style.display === "none") {
+                details.style.display = "block";
+                editMode.style.display = "none";
+            } else {
+                details.style.display = "none";
+                editMode.style.display = "block";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <aside>
+        <nav>
+            <ul>
+                <li style="background-color: #83a9d3;"><a style="color: white; text-decoration: none;">Detail view</a>
+                </li>
+                <li><a href="{{url_for('home')}}" style="color: white; text-decoration: none;">Components overview</a>
+                </li>
+                <li><a href="{{url_for('add_component')}}" style="color: white; text-decoration: none;">Add
+                        component</a>
+                    hinzufügen</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        <div class="container">
+            <h1>Detail view of the component {{ component.name }}</h1>
+            <div class="button-container">
+                <button onclick="PrintBarcode()" class="submit-btn">Print Barcode</button>
+                <button onclick="toggleEditMode()" class="toggle-btn">Edit-Mode</button>
+                <button type="button" class="delete-btn" onclick="confirmDeletionWithSweetAlert()">Delete
+                    component</button>
+            </div>
+
+            <div class="io-slider-container">
+                <label for="io-state-checkbox" style="font-size: 1.5rem; font-weight: bold;">IO-State</label>
+                <label class="toggle-slider">
+
+
+                    <input type="checkbox" id="io-state-checkbox" {% if component.io_state %}checked{% endif %}>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div id="details">
+                <div class="flex-container">
+                    <div class="details">
+                        <h2>Info</h2>
+                        <p><strong>ID:</strong> {{ component.id }}</p>
+                        <p><strong>IO-Number:</strong> {{ component.io_number }}</p>
+                        <p><strong>Name:</strong> {{ component.name }}</p>
+                        <p><strong>Quantity:</strong> {{ component.quantity }}</p>
+                        <p><strong>Category:</strong> {{ component.category }}</p>
+                        <p><strong>Description:</strong> {{ component.description | safe }}</p>
+                    </div>
+                    <div class="images">
+                        <div class="image-container">
+                            <img src="{{component.image}}">
+                        </div>
+                        <div class="barcode-container">
+                            <img src="{{component.barcode}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="pdf-viewer">
+                    <iframe src="{{component.datasheet}}"></iframe>
+                </div>
+            </div>
+
+            <div id="edit-mode" style="display:none;">
+                <form method="post" action="{{ url_for('update_component', id=component.id) }}"
+                    enctype="multipart/form-data">
+                    <div class="flex-container card">
+                        <div class="details">
+                            <label for="name-input">Name</label>
+                            <input type="text" name="name" id="name-input" placeholder="Name der Komponente"
+                                value="{{ component.name }}">
+
+                            <label for="io-number-input">IO-Number:</label>
+                            <input type="number" name="io_number" id="io-number-input" placeholder="IO-Nummer"
+                                value="{{ component.io_number }}">
+
+                            <label for="category-input">Category:</label>
+                            <input type="text" name="category" id="category-input" placeholder="Kategorie"
+                                value="{{ component.category }}">
+
+                            <label for="quantity-input">Quantity:</label>
+                            <input type="number" name="quantity" id="quantity-input" placeholder="Menge"
+                                value="{{ component.quantity }}">
+
+                            <label for="description-input">Description (Optional)</label>
+                            <textarea name="description" id="description-input"
+                                placeholder="Beschreibung der Komponente...">{{ component.description }}</textarea>
+
+                            <div class="file-input">
+                                <label for="pdf-upload">Datasheet-upload (Optional):</label>
+                                <input type="file" name="datasheet" id="pdf-upload" accept=".pdf">
+                                <span style="color: red;">Current datasheet: {{ component.datasheet }}</span>
+                            </div>
+
+                            <div class="file-input" style="padding-top: 20px;">
+                                <label for="image-upload">image-upload (Optional):</label>
+                                <input type="file" name="image" id="image-upload" accept="image/*">
+                                <span style="color: red;">Current image: {{ component.image }}</span>
+                            </div>
+                            <div style="padding-top: 20px;">
+                                <button type="submit" class="submit-btn">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        var id = "{{ component.id }}";
+        var io_state = "{{ component.io_state }}";
+        var io_number = "{{ component.io_number }}";
+        var name = "{{ component.name }}";
+        var category = "{{ component.category }}";
+        var quantity = "{{ component.quantity }}";
+        var description = "{{ component.description }}";
+        var datasheet = "{{ component.datasheet }}";
+        var image = "{{ component.image }}";
+        var barcode = "{{ component.barcode }}";
+        var delete_url = "{{ url_for('delete_component', id=component.id) }}";
+        var update_url = "{{ url_for('update_component', id=component.id) }}";
+    </script>
+    <script src="/static/js/detail.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+
+<body>
+    <aside>
+        <nav>
+            <ul>
+                <li style="background-color: #83a9d3;">
+                    <a href="{{url_for('home')}}" style="color: white; text-decoration: none;">Components overview</a>
+                </li>
+                <li>
+                    <a href="{{url_for('add_component')}}" style="color: white; text-decoration: none;">Add component</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        <header class="main-header">Inventory Management System</header>
+        <div id="modeSelectorContainer">
+            <select id="modeSelector" selected="normal">
+                <option value="normal" selected>Normal-Mode</option>
+                <option value="scan">Scan-Mode</option>
+                <option value="io">IO-Mode</option>
+                <option value="delete">Delete-Mode</option>
+            </select>
+        </div>
+        <div id="searchContainer">
+            <input type="text" id="searchBar" placeholder="Search for a component...">
+        </div>
+
+        <div id="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th style="display: none;">IO-State</th>
+                        <th>IO-Number</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Image</th>
+                        <th>Barcode</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for component in components %}
+                    <tr>
+                        <td data-label="ID">{{component.id}}</td>
+                        <td style="display: none;" data-label="IO-State">{{component.io_state}}</td>
+                        <td data-label="IO-Pin">{{component.io_number}}</td>
+                        <td data-label="Name">{{component.name}}</td>
+                        <td data-label="Kategorie">{{component.category}}</td>
+                        <td data-label="Menge">{{component.quantity}}</td>
+                        <td data-label=""><img src="{{component.image}}"></td>
+                        <td data-label="Barcode"><img src="{{component.barcode}}"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+        var delete_url = "{{ url_for('delete_component', id=0) }}";
+    </script>
+    <script src="/static/js/index.js"></script>
+</body>
+
+</html>
